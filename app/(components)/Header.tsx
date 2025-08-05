@@ -6,11 +6,21 @@ import { IoClose, IoMenu } from "react-icons/io5";
 import clsx from "clsx";
 import Link from "next/link";
 import { adminMenu, mainMenu, userMenu } from "@/lib/content";
+import { useSession, signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
+  const { data: session } = useSession();
 
-  const menu = [...mainMenu, ...userMenu, ...adminMenu];
+  let menu = mainMenu;
+  if (session) {
+    if (session.user.role === "admin") {
+      menu = [...mainMenu, ...userMenu, ...adminMenu];
+    } else {
+      menu = [...mainMenu, ...userMenu];
+    }
+  }
   return (
     <header className="h-16 border-b border-gray-200 sticky top-0 bg-white z-50">
       <div className="container flex items-center justify-between">
@@ -43,9 +53,15 @@ export default function Header() {
                     {item.label}
                   </Link>
                 ))}
-                <Link href="/signin" onClick={() => setOpen(false)} className="btn block mt-2 ">
-                  Sign In
-                </Link>
+                {session ? (
+                  <button type="button" onClick={() => signOut()} className="btn block mt-2">
+                    Signout
+                  </button>
+                ) : (
+                  <Link href="/signin" onClick={() => setOpen(false)} className="btn block mt-2 ">
+                    Sign In
+                  </Link>
+                )}
               </div>
             </div>
           </div>
@@ -57,9 +73,30 @@ export default function Header() {
               {item.label}
             </Link>
           ))}
-          <Link href="/signin" onClick={() => setOpen(false)} className="btn text-sm ml-4">
-            Sign In
-          </Link>
+          {session ? (
+            <>
+              <div className="ml-4">
+                <Image
+                  src={session.user.image as string}
+                  alt="avatar"
+                  width={40}
+                  height={40}
+                  className="rounded-full"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => signOut()}
+                className="text-sm ml-4 bg-gray-100 py-2 px-3 hover:bg-gray-200"
+              >
+                Signout
+              </button>
+            </>
+          ) : (
+            <Link href="/signin" onClick={() => setOpen(false)} className="btn text-sm ml-4">
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </header>
