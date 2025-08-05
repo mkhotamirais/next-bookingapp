@@ -1,6 +1,11 @@
+import { Metadata } from "next";
 import Image from "next/image";
 import React from "react";
 import { IoEyeOutline, IoLocateOutline } from "react-icons/io5";
+
+export const metadata: Metadata = {
+  title: "About Us",
+};
 
 export default function About() {
   return (
