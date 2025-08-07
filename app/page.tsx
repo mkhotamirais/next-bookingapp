@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import Card from "./(components)/Card";
+import Main from "./(components)/Main";
+import { Suspense } from "react";
+import SkeletonRoom from "./(components)/SkeletonRoom";
 
 export default function Home() {
   return (
@@ -38,14 +40,9 @@ export default function Home() {
             <h2 className="h2 mb-4">Room & Rates</h2>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-          </div>
+          <Suspense fallback={<SkeletonRoom />}>
+            <Main />
+          </Suspense>
         </div>
       </section>
     </>
