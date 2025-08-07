@@ -5,9 +5,15 @@ import { addDays } from "date-fns";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { createReserve } from "@/lib/actions";
-import { RoomDetailProps } from "@/types/room";
+import { DisabledDateProps, RoomDetailProps } from "@/types/room";
 
-export default function ReserveForm({ room }: { room: RoomDetailProps }) {
+export default function ReserveForm({
+  room,
+  disabledDate,
+}: {
+  room: RoomDetailProps;
+  disabledDate: DisabledDateProps[];
+}) {
   const StartDate = new Date();
   const EndDate = addDays(new Date(), 1);
 
@@ -25,6 +31,13 @@ export default function ReserveForm({ room }: { room: RoomDetailProps }) {
     null
   );
 
+  const excludeDates = disabledDate.map((item) => {
+    return {
+      start: item.startDate,
+      end: item.endDate,
+    };
+  });
+
   return (
     <div>
       <h2 className="h2">Reserve Form</h2>
@@ -38,6 +51,7 @@ export default function ReserveForm({ room }: { room: RoomDetailProps }) {
             minDate={new Date()}
             selectsRange={true}
             onChange={handleDateChange}
+            excludeDateIntervals={excludeDates}
             dateFormat={"dd-MM-YYYY"}
             wrapperClassName="w-full"
             className="py-2 px-4 rounded-md border border-gray-300 w-full"

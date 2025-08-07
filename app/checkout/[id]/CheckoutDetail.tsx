@@ -3,6 +3,7 @@ import { formatCurrency, formatDate } from "@/lib/utils";
 import Image from "next/image";
 import React from "react";
 import { differenceInCalendarDays } from "date-fns";
+import PaymentButton from "./PaymentButton";
 
 export default async function CheckoutDetail({ reservationId }: { reservationId: string }) {
   const reservation = await getReservationById(reservationId);
@@ -22,8 +23,9 @@ export default async function CheckoutDetail({ reservationId }: { reservationId:
         />
         <h3 className="h3">{reservation.Room.name}</h3>
         <p>{reservation.price}/night</p>
+        {/* payment button */}
+        <PaymentButton reservation={reservation} />
       </div>
-      {/* payment button */}
       <div>
         <table className="w-full">
           <tbody>
